@@ -23,3 +23,4 @@ Things you may want to cover:
 
 * ...
 ## Project Status: Complete
+## Git Commits: 19 commits
