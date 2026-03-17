@@ -1,68 +1,98 @@
-<h1>All Landmarks</h1>
+<h1 class="mb-4">All Landmarks</h1>
 
 <div class="row mb-4">
   <div class="col">
-    <%= link_to "Back to Home", root_path, class: "btn btn-secondary" %>
+    <%= link_to "← Back to Home", root_path, class: "btn btn-secondary" %>
   </div>
 </div>
 
-<!-- Search Form -->
-<div class="card mb-4">
-  <div class="card-header">
-    <h3>Search Landmarks</h3>
-  </div>
-  <div class="card-body">
-    <%= form_tag landmarks_path, method: :get, class: "row g-3" do %>
-      <div class="col-md-5">
-        <%= label_tag :search, "Search by name, category, or description", class: "form-label" %>
-        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "e.g., Museum, Park, etc." %>
+<!-- Search Form - Bootstrap Grid -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Search Landmarks</h5>
       </div>
-      
-      <div class="col-md-4">
-        <%= label_tag :category, "Filter by category", class: "form-label" %>
-        <%= select_tag :category, 
-              options_for_select(@categories, params[:category]), 
-              prompt: "All Categories", 
-              class: "form-select" %>
+      <div class="card-body">
+        <%= form_tag landmarks_path, method: :get, class: "row g-3" do %>
+          <div class="col-md-5">
+            <%= label_tag :search, "Search by name or description", class: "form-label" %>
+            <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "e.g., Museum, Park, etc." %>
+          </div>
+          
+          <div class="col-md-4">
+            <%= label_tag :category, "Filter by category", class: "form-label" %>
+            <%= select_tag :category, 
+                  options_for_select(@categories, params[:category]), 
+                  prompt: "All Categories", 
+                  class: "form-select" %>
+          </div>
+          
+          <div class="col-md-3 d-flex align-items-end">
+            <%= submit_tag "Search", class: "btn btn-success me-2" %>
+            <%= link_to "Clear", landmarks_path, class: "btn btn-secondary" %>
+          </div>
+        <% end %>
       </div>
-      
-      <div class="col-md-3 d-flex align-items-end">
-        <%= submit_tag "Search", class: "btn btn-primary me-2" %>
-        <%= link_to "Clear", landmarks_path, class: "btn btn-secondary" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
 
 <!-- Results count -->
 <% if params[:search].present? || params[:category].present? %>
-  <div class="alert alert-info">
-    Found <%= @landmarks.count %> landmark(s)
-    <% if params[:search].present? %>
-      matching "<strong><%= params[:search] %></strong>"
-    <% end %>
-    <% if params[:category].present? %>
-      in category "<strong><%= params[:category] %></strong>"
-    <% end %>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="alert alert-info">
+        Found <strong><%= @landmarks.count %></strong> landmark(s)
+        <% if params[:search].present? %>
+          matching "<strong><%= params[:search] %></strong>"
+        <% end %>
+        <% if params[:category].present? %>
+          in category "<strong><%= params[:category] %></strong>"
+        <% end %>
+      </div>
+    </div>
   </div>
 <% end %>
 
-<!-- Landmarks Grid -->
-<div class="row">
+<!-- Landmarks Grid - Bootstrap Grid System -->
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   <% if @landmarks.any? %>
     <% @landmarks.each do |landmark| %>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <!-- Card header with category -->
+          <div class="card-header bg-success text-white">
+            <span class="badge bg-light text-dark"><%= landmark.category %></span>
+          </div>
+          
+          <!-- Card body -->
           <div class="card-body">
             <h5 class="card-title"><%= landmark.name %></h5>
-            <h6 class="card-subtitle mb-2 text-muted"><%= landmark.category %></h6>
+            
+            <!-- Description preview -->
             <p class="card-text">
-              <strong>Address:</strong> <%= landmark.address.truncate(50) %><br>
-              <strong>Reviews:</strong> <%= landmark.reviews.count %>
+              <%= landmark.description.truncate(100) %>
             </p>
+            
+            <!-- Address with icon -->
+            <p class="card-text">
+              <small class="text-muted">
+                <i class="bi bi-geo-alt"></i>
+                <%= landmark.address.truncate(40) %>
+              </small>
+            </p>
+            
+            <!-- Reviews count -->
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">Reviews:</small>
+              <span class="badge bg-info"><%= landmark.reviews.count %></span>
+            </div>
           </div>
-          <div class="card-footer">
-            <%= link_to "View Details", landmark_path(landmark), class: "btn btn-success btn-sm" %>
+          
+          <!-- Card footer -->
+          <div class="card-footer bg-transparent">
+            <%= link_to "View Details", landmark_path(landmark), class: "btn btn-success btn-sm w-100" %>
           </div>
         </div>
       </div>
@@ -74,4 +104,11 @@
       </div>
     </div>
   <% end %>
+</div>
+
+<!-- Pagination -->
+<div class="row mt-4">
+  <div class="col-12 d-flex justify-content-center">
+    <%= paginate @landmarks %>
+  </div>
 </div>
