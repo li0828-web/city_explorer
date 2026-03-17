@@ -82,3 +82,4 @@ production:
   database: city_explorer_production
   username: city_explorer
   password: <%= ENV["CITY_EXPLORER_DATABASE_PASSWORD"] %>
+# PostgreSQL configuration for CityExplorer
