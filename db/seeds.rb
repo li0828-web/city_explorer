@@ -78,4 +78,4 @@ puts "Total records created:"
 puts "Restaurants: #{Restaurant.count}"
 puts "Landmarks: #{Landmark.count}"
 puts "Reviews: #{Review.count}"
-puts "TOTAL: #{Restaurant.count + Landmark.count + Review.count}"
+puts "TOTAL: #{Restaurant.count + Landmark.count + Review.count}"# Seed data for CityExplorer - Faker, CSV, and JSON sources
