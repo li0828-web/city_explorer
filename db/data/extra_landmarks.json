@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Central Park",
+    "category": "Park",
+    "address": "Central Park, New York, NY 10022",
+    "description": "Iconic urban park featuring walking paths, lakes, zoo, and various recreational activities."
+  },
+  {
+    "name": "Statue of Liberty",
+    "category": "Monument",
+    "address": "Liberty Island, New York, NY 10004",
+    "description": "Iconic symbol of freedom and democracy, gifted by France in 1886."
+  },
+  {
+    "name": "Empire State Building",
+    "category": "Historic Site",
+    "address": "20 W 34th St, New York, NY 10001",
+    "description": "102-story Art Deco skyscraper with observation decks offering panoramic views."
+  },
+  {
+    "name": "Brooklyn Bridge",
+    "category": "Bridge",
+    "address": "Brooklyn Bridge, New York, NY 10038",
+    "description": "Historic hybrid cable-stayed/suspension bridge connecting Manhattan and Brooklyn."
+  },
+  {
+    "name": "Metropolitan Museum of Art",
+    "category": "Museum",
+    "address": "1000 5th Ave, New York, NY 10028",
+    "description": "One of the world's largest and finest art museums, with over 2 million works."
+  }
+]
