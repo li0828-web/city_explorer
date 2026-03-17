@@ -1,74 +1,111 @@
-<h1>All Restaurants</h1>
+<h1 class="mb-4">All Restaurants</h1>
 
 <div class="row mb-4">
   <div class="col">
-    <%= link_to "Back to Home", root_path, class: "btn btn-secondary" %>
+    <%= link_to "← Back to Home", root_path, class: "btn btn-secondary" %>
   </div>
 </div>
 
-<!-- Search Form - Feature 4.1 & 4.2 -->
-<div class="card mb-4">
-  <div class="card-header">
-    <h3>Search Restaurants</h3>
-  </div>
-  <div class="card-body">
-    <%= form_tag restaurants_path, method: :get, class: "row g-3" do %>
-      <div class="col-md-5">
-        <%= label_tag :search, "Search by name or cuisine", class: "form-label" %>
-        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "e.g., Italian, Pizza, etc." %>
+<!-- Search Form - Bootstrap Grid Row with Columns -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Search Restaurants</h5>
       </div>
-      
-      <div class="col-md-4">
-        <%= label_tag :cuisine, "Filter by cuisine", class: "form-label" %>
-        <%= select_tag :cuisine, 
-              options_for_select(@cuisines, params[:cuisine]), 
-              prompt: "All Cuisines", 
-              class: "form-select" %>
+      <div class="card-body">
+        <%= form_tag restaurants_path, method: :get, class: "row g-3" do %>
+          <div class="col-md-5">
+            <%= label_tag :search, "Search by name or cuisine", class: "form-label" %>
+            <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "e.g., Italian, Pizza, etc." %>
+          </div>
+          
+          <div class="col-md-4">
+            <%= label_tag :cuisine, "Filter by cuisine", class: "form-label" %>
+            <%= select_tag :cuisine, 
+                  options_for_select(@cuisines, params[:cuisine]), 
+                  prompt: "All Cuisines", 
+                  class: "form-select" %>
+          </div>
+          
+          <div class="col-md-3 d-flex align-items-end">
+            <%= submit_tag "Search", class: "btn btn-primary me-2" %>
+            <%= link_to "Clear", restaurants_path, class: "btn btn-secondary" %>
+          </div>
+        <% end %>
       </div>
-      
-      <div class="col-md-3 d-flex align-items-end">
-        <%= submit_tag "Search", class: "btn btn-primary me-2" %>
-        <%= link_to "Clear", restaurants_path, class: "btn btn-secondary" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
 
-<!-- Results count -->
+<!-- Results count - Bootstrap Alert -->
 <% if params[:search].present? || params[:cuisine].present? %>
-  <div class="alert alert-info">
-    Found <%= @restaurants.count %> restaurant(s)
-    <% if params[:search].present? %>
-      matching "<strong><%= params[:search] %></strong>"
-    <% end %>
-    <% if params[:cuisine].present? %>
-      in cuisine "<strong><%= params[:cuisine] %></strong>"
-    <% end %>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="alert alert-info">
+        Found <strong><%= @restaurants.count %></strong> restaurant(s)
+        <% if params[:search].present? %>
+          matching "<strong><%= params[:search] %></strong>"
+        <% end %>
+        <% if params[:cuisine].present? %>
+          in cuisine "<strong><%= params[:cuisine] %></strong>"
+        <% end %>
+      </div>
+    </div>
   </div>
 <% end %>
 
-<!-- Restaurants Grid -->
-<div class="row">
+<!-- Restaurants Grid - Bootstrap Grid System -->
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   <% if @restaurants.any? %>
     <% @restaurants.each do |restaurant| %>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <!-- Card header with Bootstrap flex utilities -->
+          <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+            <span class="badge bg-primary"><%= restaurant.cuisine %></span>
+            <span class="badge bg-secondary"><%= restaurant.price_range %></span>
+          </div>
+          
+          <!-- Card body -->
           <div class="card-body">
             <h5 class="card-title"><%= restaurant.name %></h5>
-            <h6 class="card-subtitle mb-2 text-muted"><%= restaurant.cuisine %></h6>
+            
+            <!-- Using Bootstrap grid inside card -->
+            <div class="row mb-2">
+              <div class="col-6">
+                <small class="text-muted">Rating:</small>
+              </div>
+              <div class="col-6">
+                <% if restaurant.rating %>
+                  <span class="badge bg-warning"><%= restaurant.rating %>/5</span>
+                <% else %>
+                  <span class="badge bg-secondary">Not rated</span>
+                <% end %>
+              </div>
+            </div>
+            
+            <div class="row mb-2">
+              <div class="col-6">
+                <small class="text-muted">Reviews:</small>
+              </div>
+              <div class="col-6">
+                <span class="badge bg-info"><%= restaurant.reviews.count %></span>
+              </div>
+            </div>
+            
+            <!-- Address with truncation -->
             <p class="card-text">
-              <strong>Price:</strong> <%= restaurant.price_range %><br>
-              <strong>Rating:</strong> 
-              <% if restaurant.rating %>
-                <span class="badge bg-warning"><%= restaurant.rating %>/5</span>
-              <% else %>
-                <span class="badge bg-secondary">Not rated</span>
-              <% end %><br>
-              <strong>Reviews:</strong> <%= restaurant.reviews.count %>
+              <small class="text-muted">
+                <i class="bi bi-geo-alt"></i> 
+                <%= restaurant.address.truncate(40) %>
+              </small>
             </p>
           </div>
-          <div class="card-footer">
-            <%= link_to "View Details", restaurant_path(restaurant), class: "btn btn-primary btn-sm" %>
+          
+          <!-- Card footer -->
+          <div class="card-footer bg-transparent">
+            <%= link_to "View Details", restaurant_path(restaurant), class: "btn btn-primary btn-sm w-100" %>
           </div>
         </div>
       </div>
@@ -80,4 +117,11 @@
       </div>
     </div>
   <% end %>
+</div>
+
+<!-- Pagination with Bootstrap -->
+<div class="row mt-4">
+  <div class="col-12 d-flex justify-content-center">
+    <%= paginate @restaurants %>
+  </div>
 </div>
