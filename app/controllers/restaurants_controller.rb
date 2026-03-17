@@ -12,6 +12,9 @@ class RestaurantsController < ApplicationController
     if params[:cuisine].present? && params[:cuisine] != ""
       @restaurants = @restaurants.where(cuisine: params[:cuisine])
     end
+    
+    # Add pagination
+    @restaurants = @restaurants.page(params[:page]).per(9)
   end
 
   def show

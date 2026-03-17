@@ -13,6 +13,9 @@ class LandmarksController < ApplicationController
     if params[:category].present? && params[:category] != ""
       @landmarks = @landmarks.where(category: params[:category])
     end
+    
+    # Add pagination
+    @landmarks = @landmarks.page(params[:page]).per(9)
   end
 
   def show
