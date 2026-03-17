@@ -1,0 +1,42 @@
+<h1><%= @landmark.name %></h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h3>Details</h3>
+      </div>
+      <div class="card-body">
+        <p><strong>Category:</strong> <%= @landmark.category %></p>
+        <p><strong>Address:</strong> <%= @landmark.address %></p>
+        <p><strong>Description:</strong> <%= @landmark.description %></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Reviews (<%= @reviews.count %>)</h3>
+      </div>
+      <div class="card-body">
+        <% if @reviews.any? %>
+          <% @reviews.each do |review| %>
+            <div class="mb-3 pb-3 border-bottom">
+              <h5><%= review.user_name %> 
+                <span class="badge bg-warning"><%= review.rating %>/5</span>
+              </h5>
+              <p><%= review.comment %></p>
+              <small class="text-muted">Posted on <%= review.created_at.strftime("%B %d, %Y") %></small>
+            </div>
+          <% end %>
+        <% else %>
+          <p>No reviews yet. Be the first to review!</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <%= link_to "Back to All Landmarks", landmarks_path, class: "btn btn-secondary" %>
+  <%= link_to "Home", root_path, class: "btn btn-outline-secondary" %>
+</div>

@@ -1,0 +1,33 @@
+<h1>All Restaurants</h1>
+
+<div class="row mb-4">
+  <div class="col">
+    <%= link_to "Back to Home", root_path, class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<div class="row">
+  <% @restaurants.each do |restaurant| %>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title"><%= restaurant.name %></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><%= restaurant.cuisine %></h6>
+          <p class="card-text">
+            <strong>Price:</strong> <%= restaurant.price_range %><br>
+            <strong>Rating:</strong> 
+            <% if restaurant.rating %>
+              <span class="badge bg-warning"><%= restaurant.rating %>/5</span>
+            <% else %>
+              <span class="badge bg-secondary">Not rated</span>
+            <% end %><br>
+            <strong>Reviews:</strong> <%= restaurant.reviews.count %>
+          </p>
+        </div>
+        <div class="card-footer">
+          <%= link_to "View Details", restaurant_path(restaurant), class: "btn btn-primary btn-sm" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
