@@ -67,3 +67,4 @@ group :test do
 end
 gem 'faker'
 gem 'faker'
+gem 'kaminari'

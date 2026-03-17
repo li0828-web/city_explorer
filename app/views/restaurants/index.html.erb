@@ -6,27 +6,77 @@
   </div>
 </div>
 
+<!-- Search Form - Feature 4.1 & 4.2 -->
+<div class="card mb-4">
+  <div class="card-header">
+    <h3>Search Restaurants</h3>
+  </div>
+  <div class="card-body">
+    <%= form_tag restaurants_path, method: :get, class: "row g-3" do %>
+      <div class="col-md-5">
+        <%= label_tag :search, "Search by name or cuisine", class: "form-label" %>
+        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "e.g., Italian, Pizza, etc." %>
+      </div>
+      
+      <div class="col-md-4">
+        <%= label_tag :cuisine, "Filter by cuisine", class: "form-label" %>
+        <%= select_tag :cuisine, 
+              options_for_select(@cuisines, params[:cuisine]), 
+              prompt: "All Cuisines", 
+              class: "form-select" %>
+      </div>
+      
+      <div class="col-md-3 d-flex align-items-end">
+        <%= submit_tag "Search", class: "btn btn-primary me-2" %>
+        <%= link_to "Clear", restaurants_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Results count -->
+<% if params[:search].present? || params[:cuisine].present? %>
+  <div class="alert alert-info">
+    Found <%= @restaurants.count %> restaurant(s)
+    <% if params[:search].present? %>
+      matching "<strong><%= params[:search] %></strong>"
+    <% end %>
+    <% if params[:cuisine].present? %>
+      in cuisine "<strong><%= params[:cuisine] %></strong>"
+    <% end %>
+  </div>
+<% end %>
+
+<!-- Restaurants Grid -->
 <div class="row">
-  <% @restaurants.each do |restaurant| %>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title"><%= restaurant.name %></h5>
-          <h6 class="card-subtitle mb-2 text-muted"><%= restaurant.cuisine %></h6>
-          <p class="card-text">
-            <strong>Price:</strong> <%= restaurant.price_range %><br>
-            <strong>Rating:</strong> 
-            <% if restaurant.rating %>
-              <span class="badge bg-warning"><%= restaurant.rating %>/5</span>
-            <% else %>
-              <span class="badge bg-secondary">Not rated</span>
-            <% end %><br>
-            <strong>Reviews:</strong> <%= restaurant.reviews.count %>
-          </p>
+  <% if @restaurants.any? %>
+    <% @restaurants.each do |restaurant| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= restaurant.name %></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><%= restaurant.cuisine %></h6>
+            <p class="card-text">
+              <strong>Price:</strong> <%= restaurant.price_range %><br>
+              <strong>Rating:</strong> 
+              <% if restaurant.rating %>
+                <span class="badge bg-warning"><%= restaurant.rating %>/5</span>
+              <% else %>
+                <span class="badge bg-secondary">Not rated</span>
+              <% end %><br>
+              <strong>Reviews:</strong> <%= restaurant.reviews.count %>
+            </p>
+          </div>
+          <div class="card-footer">
+            <%= link_to "View Details", restaurant_path(restaurant), class: "btn btn-primary btn-sm" %>
+          </div>
         </div>
-        <div class="card-footer">
-          <%= link_to "View Details", restaurant_path(restaurant), class: "btn btn-primary btn-sm" %>
-        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="col-12">
+      <div class="alert alert-warning">
+        No restaurants found matching your criteria.
       </div>
     </div>
   <% end %>

@@ -6,21 +6,71 @@
   </div>
 </div>
 
+<!-- Search Form -->
+<div class="card mb-4">
+  <div class="card-header">
+    <h3>Search Landmarks</h3>
+  </div>
+  <div class="card-body">
+    <%= form_tag landmarks_path, method: :get, class: "row g-3" do %>
+      <div class="col-md-5">
+        <%= label_tag :search, "Search by name, category, or description", class: "form-label" %>
+        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "e.g., Museum, Park, etc." %>
+      </div>
+      
+      <div class="col-md-4">
+        <%= label_tag :category, "Filter by category", class: "form-label" %>
+        <%= select_tag :category, 
+              options_for_select(@categories, params[:category]), 
+              prompt: "All Categories", 
+              class: "form-select" %>
+      </div>
+      
+      <div class="col-md-3 d-flex align-items-end">
+        <%= submit_tag "Search", class: "btn btn-primary me-2" %>
+        <%= link_to "Clear", landmarks_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Results count -->
+<% if params[:search].present? || params[:category].present? %>
+  <div class="alert alert-info">
+    Found <%= @landmarks.count %> landmark(s)
+    <% if params[:search].present? %>
+      matching "<strong><%= params[:search] %></strong>"
+    <% end %>
+    <% if params[:category].present? %>
+      in category "<strong><%= params[:category] %></strong>"
+    <% end %>
+  </div>
+<% end %>
+
+<!-- Landmarks Grid -->
 <div class="row">
-  <% @landmarks.each do |landmark| %>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title"><%= landmark.name %></h5>
-          <h6 class="card-subtitle mb-2 text-muted"><%= landmark.category %></h6>
-          <p class="card-text">
-            <strong>Address:</strong> <%= landmark.address.truncate(50) %><br>
-            <strong>Reviews:</strong> <%= landmark.reviews.count %>
-          </p>
+  <% if @landmarks.any? %>
+    <% @landmarks.each do |landmark| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= landmark.name %></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><%= landmark.category %></h6>
+            <p class="card-text">
+              <strong>Address:</strong> <%= landmark.address.truncate(50) %><br>
+              <strong>Reviews:</strong> <%= landmark.reviews.count %>
+            </p>
+          </div>
+          <div class="card-footer">
+            <%= link_to "View Details", landmark_path(landmark), class: "btn btn-success btn-sm" %>
+          </div>
         </div>
-        <div class="card-footer">
-          <%= link_to "View Details", landmark_path(landmark), class: "btn btn-success btn-sm" %>
-        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="col-12">
+      <div class="alert alert-warning">
+        No landmarks found matching your criteria.
       </div>
     </div>
   <% end %>
